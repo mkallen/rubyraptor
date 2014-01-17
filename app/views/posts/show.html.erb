@@ -15,7 +15,7 @@
 
           <h3><b><span class="glyphicon glyphicon-random"> </span> <%= @post.title %></b></h3>
           <h3><span class="glyphicon glyphicon-calendar"></span> @post.date </h3>
-          <p class="lead alert alert-danger"><%= @post.text %></p>
+          <p class="lead "><%= @post.text %></p>
 
         </div></div>
     </div>
@@ -32,7 +32,7 @@
 
         @post.content
 
-
+        <p></p>
         <%= link_to 'Back', posts_path %>
       </div>
 
