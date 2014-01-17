@@ -1,10 +1,39 @@
 
 <%= render "welcome/header" %>
 
+<!-- Main jumbotron for a primary marketing message or call to action -->
+<div class="jumbotron alert-danger">
+  <div class="container ">
 
-<h1>Editing post (because you didn't type it properly in the first place)</h1>
- 
-<%=  render 'form' %> 
+    <h2><b><span class="glyphicon glyphicon-pencil"> Edit Entry</b>
+
+    </h2>
+    <p></p>
 
 
-<%= link_to 'Back', posts_path %>
+
+    <div class="panel " style="border-color:rgb(207, 74, 72)">
+
+      <div class="panel-heading navbar-inverse" >
+        <h3 class="panel-title"> </h3>
+      </div>
+      <div class="panel-body" style="font-size: 14px">
+
+        <%= render 'form' %>
+
+
+        <%= link_to 'Back', posts_path %>
+      </div>
+
+    </div>
+
+
+  </div>
+</div>
+
+
+<div class="container theme-showcase">
+
+</div> <!-- /container -->
+
+
