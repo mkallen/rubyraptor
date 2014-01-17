@@ -6,7 +6,9 @@
   <div class="jumbotron alert-danger">
     <div class="container ">
 
-      <h2><b>Articles/Blog Entries</b></h2>
+      <h2><b>Articles/Blog Entries</b>
+        <%= link_to '<span class="glyphicon glyphicon-plus"></span>'.html_safe, new_post_path, :class=> "btn btn-danger" %>
+      </h2>
  <p>
 
 
@@ -14,7 +16,7 @@
       <div class="panel ">
 
         <div class="panel-heading navbar-inverse">
-          <h3 class="panel-title"> <%= link_to 'Post some new words', new_post_path %></h3>
+          <h3 class="panel-title"> </h3>
         </div>
         <div class="panel-body" style="font-size: 14px">
 
