@@ -1,11 +1,42 @@
 
 <%= render "welcome/header" %>
 
+<!-- Main jumbotron for a primary marketing message or call to action -->
+<div class="jumbotron alert-danger">
+  <div class="container ">
+
+    <h2><b>Add New Entry</b>
+
+    </h2>
+    <p></p>
 
 
-<h1> New Post </h1> <br/>
-(best post ever) Can you compare?
 
-<%= render 'form' %>
+    <div class="panel " style="border-color:rgb(207, 74, 72)">
 
-<%= link_to 'Back...to the future (or the previous page)', posts_path %>
+      <div class="panel-heading navbar-inverse" >
+        <h3 class="panel-title"> </h3>
+      </div>
+      <div class="panel-body" style="font-size: 14px">
+
+        <%= render 'form' %>
+
+
+        <%= link_to 'Back', posts_path %>
+      </div>
+
+    </div>
+
+
+  </div>
+</div>
+
+
+<div class="container theme-showcase">
+
+</div> <!-- /container -->
+
+
+
+
+
