@@ -8,7 +8,9 @@
     <h2><b>Ruby on Rails Sample App</b></h2>
     <p>This is a sample app created using the Rails Getting Started tutorial, my 'RubyRaptor' Debian7 CloudAtCost server,
       Vim text editor, RubyMine IDE, and bootstrap-sass css.</p>
-    <p><a class="btn btn-danger btn-lg" role="button"><span class="glyphicon glyphicon-star"></span> The Blog App &raquo;</a></p>
+    <p>
+      <%= link_to '<span class="glyphicon glyphicon-star"></span> The Blog App &raquo;'.html_safe, posts_path, :class=> "btn btn-danger btn-lg" %>
+    </p>
   </div>
 </div>
 
@@ -18,26 +20,6 @@
 <h3> These pages are a work-in-progress  </h3>
 
 <p/>
-
-<h4> ... </h4>
-
-
-<p/>
-
-<button type="button" class="btn btn-default btn-lg">
-  <span class="glyphicon glyphicon-star"></span> Star
-</button>
-
-<p/>
-
-<%= link_to "The Blog App", controller: "posts", :class=> "btn btn-danger btn-lg", :role=> "button" %>
-
-  <%= link_to '<span class="glyphicon glyphicon-star"></span> The Blog App &raquo;'.html_safe, posts_path, :class=> "btn btn-danger btn-lg" %>
-
-<p/>
-
-A wild GitHub appeared!
-
 
 
 </div> <!-- /container -->
