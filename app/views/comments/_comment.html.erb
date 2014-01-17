@@ -5,7 +5,7 @@
   <%= link_to '<span class="glyphicon glyphicon-pencil" alt="Delete Comment"></span>'.html_safe, [comment.post, comment],
               method: :delete,
               data: { confirm: 'Are you sure?' }, :class=> "btn btn-danger" %>
-   <strong> [<%= comment.commenter %>] comments:</strong>
+   <strong> [<%= comment.timestamp %>] <%= comment.commenter %>:</strong>
    <br/><%= comment.body %>
 </p>
 
