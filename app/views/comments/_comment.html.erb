@@ -1,20 +1,16 @@
 
 
+
 <p>
-  <strong>Commenter:</strong>
-  <%= comment.commenter %>
-</p>
- 
-<p>
-  <strong>Comment:</strong>
+  <%= link_to '<span class="glyphicon glyphicon-pencil" alt="Delete Comment"></span>'.html_safe, [comment.post, comment],
+              method: :delete,
+              data: { confirm: 'Are you sure?' }, :class=> "btn btn-danger" %>
+   <strong> <%= comment.commenter %> </strong>
   <%= comment.body %>
 </p>
 
 
 <p>
-  <%= link_to 'Destroy Comment', [comment.post, comment],
-               method: :delete,
-               data: { confirm: 'Are you sure?' } %>
 </p>
 
 
