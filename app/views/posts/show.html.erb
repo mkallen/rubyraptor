@@ -13,7 +13,9 @@
       <div class="media-body ">
         <div class="well-sm">
 
-          <h3><b><span class="glyphicon glyphicon-random"> </span> <%= @post.title %></b></h3>
+          <h3><b><span class="glyphicon glyphicon-random"> </span> <%= @post.title %></b>
+            <%= link_to '<span class="glyphicon glyphicon-pencil"></span>'.html_safe, edit_post_path(@post), :class=> "btn btn-danger" %>
+          </h3>
           <h3><span class="glyphicon glyphicon-calendar"></span> @post.date </h3>
           <p class="lead alert" style="background-color: white; border-color:rgb(207, 74, 72)"><%= @post.text %></p>
 
@@ -56,10 +58,10 @@
   <%= render "comments/form" %>
 
   <%= link_to 'Back', posts_path %>
-  | <%= link_to 'Edit', edit_post_path(@post) %>
 
 
 
+  <p></p>
 
 </div> <!-- /container -->
 
