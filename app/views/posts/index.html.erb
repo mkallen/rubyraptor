@@ -24,7 +24,7 @@
             <tr>
               <th>Title</th>
               <th>Summary</th>
-              <th>Details</th>
+              <th>View</th>
               <th>Edit</th>
               <th>Delete</th>
             </tr>
@@ -35,7 +35,7 @@
                   <td><%= post.text %></td>
                   <td><%= link_to '<span class="glyphicon glyphicon-list"></span>'.html_safe, post %></td>
                   <td><%= link_to '<span class="glyphicon glyphicon-pencil"></span>'.html_safe, edit_post_path(post) %></td>
-                  <td><%= link_to '<span class="glyphicon glyphicon-plus"></span>'.html_safe, post_path(post), method: :delete, data: { confirm: 'Are you sure?' } %><td/>
+                  <td><%= link_to '<span class="glyphicon glyphicon-trash"></span>'.html_safe, post_path(post), method: :delete, data: { confirm: 'Are you sure?' } %><td/>
 
                 </tr>
             <% end %>
