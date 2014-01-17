@@ -1,32 +1,67 @@
 
 <%= render "welcome/header" %>
 
+<!-- Main jumbotron for a primary marketing message or call to action -->
+<div class="jumbotron alert-danger">
+  <div class="container ">
+
+    <div class="media ">
+      <div class="pull-left well-sm" >
+
+        <%= image_tag "/assets/iconme.png", :class => "media-object thumbnail", :width =>"200px" %>
+      </div>
+      <div class="media-body ">
+        <div class="well-sm">
+
+          <h3><b><span class="glyphicon glyphicon-random"> </span> <%= @post.title %></b></h3>
+          <h3><span class="glyphicon glyphicon-calendar"></span> @post.date </h3>
+          <p class="lead alert alert-danger"><%= @post.text %></p>
+
+        </div></div>
+    </div>
+    <p></p>
 
 
 
-<div class="media ">
-  <div class="pull-left well-sm" >
+    <div class="panel " style="border-color:rgb(207, 74, 72)">
 
-    <%= image_tag "/assets/iconme.png", :class => "media-object thumbnail", :width =>"200px" %>
+      <div class="panel-heading navbar-inverse" >
+        <h3 class="panel-title"> </h3>
+      </div>
+      <div class="panel-body" style="font-size: 14px">
+
+        @post.content
+
+
+        <%= link_to 'Back', posts_path %>
+      </div>
+
+    </div>
+
+
   </div>
-  <div class="media-body ">
-    <div class="well-sm">
-
-      <h3><b><span class="glyphicon glyphicon-random"> </span> <%= @post.title %></b></h3>
-      <h3><span class="glyphicon glyphicon-calendar"></span> @post.date </h3>
-      <p class="lead alert alert-danger"><%= @post.text %></p>
-
-    </div></div>
 </div>
 
 
+<div class="container theme-showcase">
 
 
-<h2>Comments</h2>
-<%= render @post.comments  %>
+  <h2>Comments</h2>
+  <%= render @post.comments  %>
 
-<h2>Add a comment:</h2>
-<%= render "comments/form" %>
+  <h2>Add a comment:</h2>
+  <%= render "comments/form" %>
 
-<%= link_to 'Back', posts_path %> 
- | <%= link_to 'Edit', edit_post_path(@post) %>
+  <%= link_to 'Back', posts_path %>
+  | <%= link_to 'Edit', edit_post_path(@post) %>
+
+
+</div> <!-- /container -->
+
+
+
+
+
+
+
+
