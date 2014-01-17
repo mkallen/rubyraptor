@@ -1,7 +1,7 @@
 <%= form_for  @post do |f|  %>
   <% if @post.errors.any? %>
   <div id="error_explanation" class="alert alert-danger">
-    <h3><%= pluralize(@post.errors.count, "error") %> prevented
+    <h3><span class="glyphicon glyphicon-ban-circle"></span> <%= pluralize(@post.errors.count, "error") %> prevented
       changes from being saved:</h3>
     <ul>
     <% @post.errors.full_messages.each do |msg| %>
