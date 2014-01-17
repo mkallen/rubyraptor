@@ -2,15 +2,24 @@
 <%= render "welcome/header" %>
 
 
-<p>
-  <strong>Title:</strong>
-  <%= @post.title %>
-</p>
- 
-<p>
-  <strong>Text:</strong>
-  <%= @post.text %>
-</p>
+
+
+<div class="media ">
+  <div class="pull-left well-sm" >
+    <img class="media-object thumbnail" width='200' src="../img/iconme.png" alt="...">
+    <%= image_tag "/assets/shellraptor_logo.png", :class => media-object thumbnail" %>
+  </div>
+  <div class="media-body ">
+    <div class="well-sm">
+
+      <h3><b><span class="glyphicon glyphicon-random"> </span> <%= @post.title %></b></h3>
+      <h3><span class="glyphicon glyphicon-calendar"></span> @post.date </h3>
+      <p class="lead alert alert-info"><%= @post.text %></p>
+
+    </div></div>
+</div>
+
+
 
 
 <h2>Comments</h2>
