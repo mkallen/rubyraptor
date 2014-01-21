@@ -1,6 +1,10 @@
 
 
-<%= if(!comment.created_at.nil_zero) %>
+<%= if comment.created_at.nil_zero %>
+
+    NOT RENDERING COMMENT because it is NULL
+
+<%= else %>
 
 <p>
 
