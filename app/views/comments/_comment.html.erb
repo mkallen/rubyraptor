@@ -8,26 +8,16 @@
 
     <tr >
 
-      <td rowspan="3">
+      <td rowspan="2" class="danger">
         <%= link_to '<span class="glyphicon glyphicon-trash" alt="Delete Comment"></span>'.html_safe, [comment.post, comment],
                     method: :delete,
                     data: { confirm: 'Are you sure?' }, :class=> "btn btn-danger" %>
-      </td>
-      <td>
-      </td>
-
-    </tr>
-
-    <tr >
-
-      <td>
       </td>
       <td>
         <strong> [<%= comment.created_at.strftime("%m/%d/%Y at %I:%M%p") %>] <%= comment.commenter %>:</strong>
       </td>
 
     </tr>
-
 
     <tr >
 
