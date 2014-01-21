@@ -1,13 +1,18 @@
 class CommentsController < ApplicationController
 
+  #def new
+  #  @comment = Comment.new
+ # end
+
   def create
 	@post = Post.find(params[:post_id])
 	#@comment = @post.comments.create(params[:comment].permit(:commenter, :body))
 	#redirect_to post_path(@post)
-  if @post.comments.create(params[:comment].permit(:commenter, :body))
+  @comment = @post.comments.build(params[:comment].permit(:commenter, :body))
+  if @comment.save
     redirect_to post_path(@post)
   else
-    render 'show'
+    render "posts/show"
   end
 
   end
