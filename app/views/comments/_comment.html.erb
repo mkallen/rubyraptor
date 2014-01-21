@@ -3,7 +3,7 @@
 
 <p>
 
-   <strong> [<%= comment.created_at.strftime("%m/%d/%Y") %>] <%= comment.commenter %>:</strong>
+   <strong> [<%= comment.created_at %>] <%= comment.commenter %>:</strong>
    <br/>
   <%= link_to '<span class="glyphicon glyphicon-pencil" alt="Delete Comment"></span>'.html_safe, [comment.post, comment],
               method: :delete,
