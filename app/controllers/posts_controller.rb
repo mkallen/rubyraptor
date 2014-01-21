@@ -43,6 +43,7 @@ end
 
 def index
   @posts = Post.all
+  @posts_count = Post.count
 end
 
   private
