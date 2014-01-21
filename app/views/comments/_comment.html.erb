@@ -6,9 +6,9 @@
 
 <% else %>
 
-    <tr >
+    <tr class="danger">
 
-      <td rowspan="2" class="danger">
+      <td rowspan="2" >
         <%= link_to '<span class="glyphicon glyphicon-trash" alt="Delete Comment"></span>'.html_safe, [comment.post, comment],
                     method: :delete,
                     data: { confirm: 'Are you sure?' }, :class=> "btn btn-danger" %>
