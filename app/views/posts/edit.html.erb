@@ -1,6 +1,14 @@
 
 <%= render "welcome/header" %>
 
+<script type="text/javascript" src="http://js.nicedit.com/nicEdit-latest.js"></script> <script type="text/javascript">
+
+    bkLib.onDomLoaded(function() {
+        new nicEditor().panelInstance('post_content');
+    });
+
+</script>
+
 <!-- Main jumbotron for a primary marketing message or call to action -->
 <div class="jumbotron alert-danger">
   <div class="container ">
