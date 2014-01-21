@@ -32,7 +32,7 @@
       </div>
       <div class="panel-body" style="font-size: 14px">
 
-        <%= @post.content %>
+        <%= @post.content.html_safe %>
 
         <p></p>
         <%= link_to 'Back', posts_path %>
