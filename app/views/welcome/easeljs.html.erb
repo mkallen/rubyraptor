@@ -33,6 +33,9 @@ Easel.js + Box2dWeb "Ball Arena" (Use arroy keys to move paddle).<br/>
 
     crunchycreatures.demo = (function() {
 
+        try
+        {
+
         // Box2d vars
         var b2Vec2 = Box2D.Common.Math.b2Vec2;
         var b2BodyDef = Box2D.Dynamics.b2BodyDef;
@@ -43,6 +46,12 @@ Easel.js + Box2dWeb "Ball Arena" (Use arroy keys to move paddle).<br/>
         var b2PolygonShape = Box2D.Collision.Shapes.b2PolygonShape;
         var b2CircleShape = Box2D.Collision.Shapes.b2CircleShape;
         var b2DebugDraw = Box2D.Dynamics.b2DebugDraw;
+
+        }
+        catch(e){
+            console.log("Box2D RELOAD");
+            window.location.reload();
+        }
 
         // demo vars
         var canvas, context, debugCanvas, debugContext;
@@ -62,6 +71,7 @@ Easel.js + Box2dWeb "Ball Arena" (Use arroy keys to move paddle).<br/>
                 setup.canvas();
             }
             catch(e){
+                console.log("SETUP RELOAD");
                 window.location.reload();
             }
 
