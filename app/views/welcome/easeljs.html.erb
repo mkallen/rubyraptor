@@ -58,8 +58,7 @@ Easel.js + Box2dWeb "Ball Arena".<br/>
         $(document).ready(function() {
             // setup functions to run once page is loaded
             setup.canvas();
-            window.onfocus = onFocus;
-            window.onblur = onBlur;
+
         });
 
         function onFocus() { focused = true; box2d.pauseResume(false); $('#paused').css({'display':'none'}); }
@@ -230,6 +229,8 @@ Easel.js + Box2dWeb "Ball Arena".<br/>
                 /* ------ box2d SETUP on handleComplete------- */
                 setup.ticker();
                 box2d.setup();
+                window.onfocus = onFocus;
+                window.onblur = onBlur;
 
             }
 
