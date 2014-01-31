@@ -57,12 +57,15 @@ Easel.js + Box2dWeb "Ball Arena".<br/>
 
         $(document).ready(function() {
             // setup functions to run once page is loaded
-            if(setup =='undefined')
+            try
             {
+                setup.canvas();
+            }
+            catch(e){
                 window.location.reload();
             }
 
-            setup.canvas(); //test
+
 
         });
 
