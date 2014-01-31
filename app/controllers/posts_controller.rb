@@ -1,4 +1,7 @@
 class PostsController < ApplicationController
+
+  http_basic_authenticate_with name: "uid", password: "uid", only: [:destroy, :edit, :update]
+
   def new
 	@post = Post.new
   end
