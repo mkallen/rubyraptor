@@ -2,22 +2,8 @@
 <%= render "welcome/header" %>
 
 
-<!-- Main jumbotron for a primary marketing message or call to action -->
-<div class="jumbotron alert-danger">
-  <div class="container ">
-    <h2><b>Ruby on Rails Sample App</b></h2>
-    <p>This is a sample app created using the Rails Getting Started tutorial, my 'RubyRaptor' Debian7 CloudAtCost server,
-      Vim text editor, RubyMine IDE, and bootstrap-sass css.</p>
-    <p>
-      <%= link_to '<span class="glyphicon glyphicon-star"></span> The Blog App &raquo;'.html_safe, posts_path, :class=> "btn btn-danger btn-lg" %>
-    </p>
-  </div>
-</div>
-
-<div class="container theme-showcase">
 
 
-<h3> These pages are a work-in-progress  </h3>
 
 <p/>
 
@@ -27,15 +13,17 @@
 
 
 Combining Easel.js and Box2d Demo.<br/>
-Note: This demo only works in modern browsers.<br/><br/>
-<canvas width="500" height="500" id="demoCanvas"></canvas>
-<canvas width="500" height="500" id="debugCanvas"></canvas>
+Note: This demo only works in modern browsers. <br/><br/>
+<canvas width="600" height="500" id="demoCanvas"></canvas>
+<canvas width="600" height="500" id="debugCanvas"></canvas>
 <div id="paused">Paused. Click to resume.</div><br/>
 <div id="debug" class="button">Show/Hide Debug</div>
-<script type="text/javascript" src="http://www.luxanimals.com/tutorials/birds/libs/jquery-1.7.1.min.js"></script>
-<script type="text/javascript" src="http://www.luxanimals.com/tutorials/birds/libs/easel.js"></script>
-<script type="text/javascript" src="http://code.createjs.com/createjs-2013.12.12.min.js"></script>
-<script type="text/javascript" src="http://www.luxanimals.com/tutorials/birds/libs/Box2dWeb-2.1.a.3.min.js"></script>
+<script type="text/javascript" src="http://www.luxanimals.com/tutorials/birds/libs/jquery-1.7.1.min.js">//JQUERY</script>
+<script type="text/javascript" src="http://www.luxanimals.com/tutorials/birds/libs/easel.js">//EASELjs</script>
+<script type="text/javascript" src="http://code.createjs.com/createjs-2013.12.12.min.js">//CREATEjs</script>
+<script type="text/javascript" src="http://www.luxanimals.com/tutorials/birds/libs/Box2dWeb-2.1.a.3.min.js">//Box2DWeb</script>
+<script src="https://rawgithub.com/madrobby/keymaster/master/keymaster.js">//KEYBOARD_INPUT_HELPER</script>
+
 <script type="text/javascript">
 
     var crunchycreatures = {};
@@ -55,26 +43,120 @@ Note: This demo only works in modern browsers.<br/><br/>
 
         // demo vars
         var canvas, context, debugCanvas, debugContext;
-        var birdDelayCounter = 0; // counter for delaying creation of birds
+        var ballDelayCounter = 0; // counter for delaying creation of balls
         var focused = true;
 
         //canvas setup vars
         var canvasW, canvasH, loader;
-        var sky;
+        var sky, myActor;
 
         $('#debug').on('click', function() { $('#debugCanvas').toggle(); });  // toggle debug view
 
         $(document).ready(function() {
             // setup functions to run once page is loaded
             setup.canvas();
-            setup.ticker();
-            box2d.setup();
             window.onfocus = onFocus;
             window.onblur = onBlur;
         });
 
         function onFocus() { focused = true; box2d.pauseResume(false); $('#paused').css({'display':'none'}); }
         function onBlur() { focused = false; box2d.pauseResume(true); $('#paused').css({'display':'block'}); }
+
+        (function() { //Actor class for sample moving object /by key press
+            var Actor = function(color) {
+
+                console.log("*** Actor Initialized ***");
+
+                this.initialize(color);
+            }
+
+            //Define the easeljs object (what we see move on the screen)
+            var p = Actor.prototype = new createjs.Shape();
+            //Define the box2d physics object on top of the easeljs object (that interacts with other box2d physics objects)
+            var actorFixture = new b2FixtureDef;
+            var actorBodyDef = new b2BodyDef;
+            var actorBody;
+
+            var currentX = 100;
+            var currentY = 100;
+            var width = 150;
+            var height = 50;
+            var aScale, aWorld;
+
+            p.pixelsPerSecond = 100;
+
+            p.initialize = function(color) {
+
+                //draw easeljs object
+                p.graphics.beginFill(color).drawRoundRect(0,0,width,height, 10);
+
+            }
+
+            p.box2dInit = function(world, scale, density, friction)
+            {
+                aScale = scale;
+                aWorld = world;
+
+                actorFixture.density = density;
+                actorFixture.friction = friction;
+                actorFixture.shape = new b2PolygonShape;
+                //easel rectange is height, width, box2d rectangle is height radias from center and width radius from center
+                //so we must divide by two.
+                actorFixture.shape.SetAsBox( (width/2) / scale, (height/2) / scale); //pixels x, y /box2d SCALE conversion
+
+                //we must also offset the box2d position by half of easel object due to easel x,y set at top left 0,0 and box2d at CENTER of object.
+                this.move(currentX + (width/2), currentY + (height/2));
+            }
+
+            p.move = function(x, y)
+            {
+                try{ //Destroy old position (if there is one)
+                    //May not be the best way to do this, (but it works) //TODO FIXME
+                    aWorld.DestroyBody(actorBody);
+                }
+                catch(e){
+                    ///
+                }
+
+                //create new position
+                actorBodyDef.type = b2Body.b2_staticBody;
+                actorBodyDef.position.x = x / aScale;
+                actorBodyDef.position.y = y / aScale;
+
+                actorBody = aWorld.CreateBody(actorBodyDef);
+                actorBody.CreateFixture(actorFixture);
+            }
+
+            p.movementCalculation = function(delta) {
+                return (delta)/1000*p.pixelsPerSecond;
+            }
+
+            p.moveUp = function(delta) {
+                this.y -= this.movementCalculation(delta);
+                currentY = this.y
+                this.move(currentX + (width/2), currentY + (height/2));
+            }
+
+            p.moveDown = function(delta) {
+                this.y += this.movementCalculation(delta);
+                currentY = this.y
+                this.move(currentX + (width/2), currentY + (height/2));
+            }
+
+            p.moveLeft = function(delta) {
+                this.x -= this.movementCalculation(delta);
+                currentX = this.x
+                this.move(currentX + (width/2), currentY + (height/2));
+            }
+
+            p.moveRight = function(delta) {
+                this.x += this.movementCalculation(delta);
+                currentX = this.x
+                this.move(currentX + (width/2), currentY + (height/2));
+            }
+
+            window.Actor = Actor;
+        }());
 
         /* ------ SETUP ------- */
 // initial setup of canvas, contexts, and render loop
@@ -84,6 +166,9 @@ Note: This demo only works in modern browsers.<br/><br/>
 
 
             var canvas = function() { //init()
+
+                console.log("*** Canvas Init ***");
+
                 canvas = document.getElementById('demoCanvas');
                 debugCanvas = document.getElementById('debugCanvas');
                 context = canvas.getContext('2d');
@@ -100,10 +185,10 @@ Note: This demo only works in modern browsers.<br/><br/>
                 console.log("CANVAS HEIGHT: " + canvasH);
 
                 manifest = [
-                    {src:"/assets/ball_blue.png", id:"ball_blue"},
-                    {src:"/assets/hexagon.png", id:"sky"},
-                    {src:"/assets/ball_red.png", id:"ball_red"},
-                    {src:"/assets/ball_green.png", id:"ball_green"},
+                    {src:"ball_blue.png", id:"ball_blue"},
+                    {src:"hexagon.png", id:"sky"},
+                    {src:"ball_red.png", id:"ball_red"},
+                    {src:"ball_green.png", id:"ball_green"},
                     {src:"http://createjs.com/Demos/EaselJS/assets/parallaxHill2.png", id:"hill2"}
                 ];
 
@@ -114,6 +199,8 @@ Note: This demo only works in modern browsers.<br/><br/>
             }
 
             function handleComplete() {
+
+                console.log("*** Canvas handleComplete ***");
 
                 //Load the background image and scale it according to canvas height/width.
                 skyImage = loader.getResult("sky");
@@ -132,12 +219,42 @@ Note: This demo only works in modern browsers.<br/><br/>
 
                 stage.addChild(sky);
 
+                //key input actor test
+                myActor = stage.addChild(new Actor("#000"));
+                myActor.x = 100;
+                myActor.y = 100;
+
+                /* ------ box2d SETUP on handleComplete------- */
+                setup.ticker();
+                box2d.setup();
+
             }
 
             var ticker = function() {
+
+                console.log("*** Canvas tickerInit ***");
+
                 Ticker.setFPS(30);
                 //Ticker.useRAF = true;
-                Ticker.addListener(crunchycreatures.demo);  // looks for "tick" function within the luxanimals.demo object
+                Ticker.addListener(crunchycreatures.demo);  // looks for "tick" function within the demo object
+
+                //key press test
+                createjs.Ticker.addEventListener("tick", tick);
+                function tick(event) {
+                    if (key.isPressed('up') || key.isPressed('w')) {
+                        myActor.moveUp(event.delta);
+                    }
+                    if (key.isPressed('down') || key.isPressed('s')) {
+                        myActor.moveDown(event.delta);
+                    }
+                    if (key.isPressed('left') || key.isPressed('a')) {
+                        myActor.moveLeft(event.delta);
+                    }
+                    if (key.isPressed('right') || key.isPressed('d')) {
+                        myActor.moveRight(event.delta);
+                    }
+                }
+
             }
 
             return {
@@ -146,10 +263,10 @@ Note: This demo only works in modern browsers.<br/><br/>
             }
         })();
 
-        /* ------- Birds --------- */
-// bitmap birds to be sent to box2d
+        /* ------- balls --------- */
+// bitmap balls to be sent to box2d
 
-        var birds = (function() {
+        var balls = (function() {
 
             var spawn = function() {
 
@@ -160,15 +277,15 @@ Note: This demo only works in modern browsers.<br/><br/>
                 if (colorball % 5 ==0)
                     ball = loader.getResult("ball_red");//"ball_red.png";
 
-                var birdBMP = new Bitmap(ball);//new Bitmap("http://www.luxanimals.com/tutorials/birds/images/bird.png");
-                birdBMP.x = Math.round(Math.random()*30);//Math.round(Math.random()*500);
-                birdBMP.y = 155;//Math.round(Math.random()*500); //-30;
-                birdBMP.regX = 25;   // important to set origin point to center of your bitmap
-                birdBMP.regY = 25;
-                birdBMP.snapToPixel = true;
-                birdBMP.mouseEnabled = false;
-                stage.addChild(birdBMP);
-                box2d.createBird(birdBMP);
+                var ballBMP = new Bitmap(ball);//new Bitmap("http://www.luxanimals.com/tutorials/birds/images/bird.png");
+                ballBMP.x = Math.round(Math.random()*30);//Math.round(Math.random()*500);
+                ballBMP.y = 155;//Math.round(Math.random()*500); //-30;
+                ballBMP.regX = 25;   // important to set origin point to center of your bitmap
+                ballBMP.regY = 25;
+                ballBMP.snapToPixel = true;
+                ballBMP.mouseEnabled = false;
+                stage.addChild(ballBMP);
+                box2d.createBall(ballBMP);
             }
 
             return {
@@ -193,6 +310,8 @@ Note: This demo only works in modern browsers.<br/><br/>
 
             // box2d world setup and boundaries
             var setup = function() {
+
+                console.log("*** Box2d setup ***");
 
                 world = new b2World(new b2Vec2(1,1), true); //(0, 10)
                 addDebug();
@@ -281,7 +400,6 @@ Note: This demo only works in modern browsers.<br/><br/>
                 triTopLeft.shape = new b2PolygonShape;
                 triTopLeft.density = triDensity;
                 triTopLeft.friction = triFriction;
-                //triTopLeft.angle = 0;
                 triTopLeft.shape.SetAsArray([
                     new b2Vec2(5, 0),
                     new b2Vec2(0, 5),
@@ -297,7 +415,6 @@ Note: This demo only works in modern browsers.<br/><br/>
                 triBottomLeft.shape = new b2PolygonShape;
                 triBottomLeft.density = triDensity;
                 triBottomLeft.friction = triFriction;
-                //triBottomLeft.angle = 0;
                 triBottomLeft.shape.SetAsArray([
                     new b2Vec2(5, 5),
                     new b2Vec2(0, 5),
@@ -308,8 +425,24 @@ Note: This demo only works in modern browsers.<br/><br/>
                 triBottomLeftBodyDef.position.Set( (triOffsetD) / SCALE, (canvasH + triOffsetC) / SCALE);
                 var tri3 = world.CreateBody(triBottomLeftBodyDef);
                 tri3.CreateFixture(triBottomLeft);
+                //triangle bottom right
+                var triBottomRight = new b2FixtureDef;
+                triBottomRight.shape = new b2PolygonShape;
+                triBottomRight.density = triDensity;
+                triBottomRight.friction = triFriction;
+                triBottomRight.shape.SetAsArray([
+                    new b2Vec2(5, 5),
+                    new b2Vec2(0, 5),
+                    new b2Vec2(5, 0)], 3
+                ); //triangle shape
+                var triBottomRightBodyDef = new b2BodyDef;
+                triBottomRightBodyDef.type = b2Body.b2_staticBody;
+                triBottomRightBodyDef.position.Set( (canvasW + triOffsetC) / SCALE, (canvasH + triOffsetC) / SCALE);
+                var tri4 = world.CreateBody(triBottomRightBodyDef);
+                tri4.CreateFixture(triBottomRight);
 
 
+                myActor.box2dInit(world, SCALE, 1, 2);
 
             }
 
@@ -336,24 +469,24 @@ Note: This demo only works in modern browsers.<br/><br/>
                 actors.push(this);
             }
 
-            // create bird body shape and assign actor object
-            var createBird = function(skin) {
-                var birdFixture = new b2FixtureDef;
-                birdFixture.density = 0.003; //1;
-                birdFixture.restitution = 1.14 ;//0.6;
-                birdFixture.friction = 0.5;
-                birdFixture.shape = new b2CircleShape(24 / SCALE);
-                var birdBodyDef = new b2BodyDef;
-                birdBodyDef.type = b2Body.b2_dynamicBody;
-                birdBodyDef.position.x = skin.x / SCALE;
-                birdBodyDef.position.y = skin.y / SCALE;
-                var bird = world.CreateBody(birdBodyDef);
-                bird.CreateFixture(birdFixture);
+            // create ball body shape and assign actor object
+            var createBall = function(skin) {
+                var ballFixture = new b2FixtureDef;
+                ballFixture.density = 0.003; //1;
+                ballFixture.restitution = 1.14 ;//0.6;
+                ballFixture.friction = 0.5;
+                ballFixture.shape = new b2CircleShape(24 / SCALE);
+                var ballBodyDef = new b2BodyDef;
+                ballBodyDef.type = b2Body.b2_dynamicBody;
+                ballBodyDef.position.x = skin.x / SCALE;
+                ballBodyDef.position.y = skin.y / SCALE;
+                var ball = world.CreateBody(ballBodyDef);
+                ball.CreateFixture(ballFixture);
 
                 // assign actor
-                var actor = new actorObject(bird, skin);
-                bird.SetUserData(actor);  // set the actor as user data of the body so we can use it later: body.GetUserData()
-                bodies.push(bird);
+                var actor = new actorObject(ball, skin);
+                ball.SetUserData(actor);  // set the actor as user data of the body so we can use it later: body.GetUserData()
+                bodies.push(ball);
             }
 
             // remove actor and it's skin object
@@ -404,7 +537,7 @@ Note: This demo only works in modern browsers.<br/><br/>
             return {
                 setup: setup,
                 update: update,
-                createBird: createBird,
+                createBall: createBall,
                 pauseResume: pauseResume
             }
         })();
@@ -417,11 +550,14 @@ Note: This demo only works in modern browsers.<br/><br/>
                 box2d.update();
                 stage.update();
 
-                birdDelayCounter++;
-                if(birdDelayCounter % 50 === 0) {  // delay so it doesn't spawn a bird on every frame
-                    birdDelayCounter = 0;
-                    birds.spawn();
+                //make balls appear in arena
+                ballDelayCounter++;
+                if(ballDelayCounter % 50 === 0) {  // delay so it doesn't spawn a ball on every frame
+                    ballDelayCounter = 0;
+                    balls.spawn();
                 }
+
+
             }
         }
 
@@ -437,7 +573,6 @@ Note: This demo only works in modern browsers.<br/><br/>
 
 
 </script>
-
 
 
 
